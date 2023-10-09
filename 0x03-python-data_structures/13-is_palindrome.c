@@ -1,32 +1,75 @@
 #include "lists.h"
-#include <stdio.h>
-#include <stdlib.h>
+
+listint_t *reverse_listint(listint_t **head);
+int is_palindrome(listint_t **head);
+
 /**
- * is_palindrome - checks if a singly linked list is a palindrome
- * @head: linked list
- * Return: 0 if it is not a palindrome, 1 if it is a palindrome
+ * reverse_listint - Reverse a singly-linked listint_t list.
+ *
+ * @head: A pointer to the stating node of the list to the reverse.
+ *
+ * Return: A pointer to the head of the reversed list.
+ */
+listint_t *reverse_listint(listint_t **head)
+{
+    listint_t *node = *head, *next, *prev = NULL;
+
+    while (node)
+    {
+        next = node->next;
+        node->next = prev;
+        prev = node;
+        node = next;
+    }
+    *head = prev;
+
+    return (*head);
+}
+
+/**
+ * is_palindrome - Checks if a singly linked list is a palindrome.
+ *
+ * @head: A pointer to the head of the linked list.
+ *
+ * Return: If the linked list is not a palindrome - 0.
+ *         If the linled list is a palindrome - 1.
  */
 int is_palindrome(listint_t **head)
 {
-    listint_t *aux;
-    int len, i, *copy;
+    listint_t *tmp, *rev, *mid;
+    size_t size = 0, index;
 
-    if (!*head || !head)
+    if (*head == NULL || (*head)->next == NULL)
         return (1);
-    aux = *head;
-    for (len = 1; aux->next; len++)
-        aux = aux->next;
-    copy = malloc(sizeof(int) * (len));
-    if (!copy)
-        return (-1);
-    for (i = 0, aux = *head; i < len; i++, aux = aux->next)
-        copy[i] = aux->n;
-    for (i = 0; i < (len / 2); i++)
-        if (copy[i] != copy[len - 1 - i])
-        {
-            free(copy);
+
+    tmp = *head;
+    while (tmp)
+    {
+        size++;
+        tmp = tmp->next;
+    }
+
+    tmp = *head;
+    for (index = 0; index < (size / 2) - 1; index++)
+        tmp = tmp->next;
+
+    if ((size % 2) == 0 && tmp->n != tmp->next->n)
+        return (0);
+
+    tmp = tmp->next->next;
+    rev = reverse_listint(&tmp);
+    mid = rev;
+
+    tmp = *head;
+    while (rev)
+    {
+        if (tmp->n != rev->n)
             return (0);
-        }
-    free(copy);
+        tmp = tmp->next;
+        rev = rev->next;
+    }
+
+    reverse_listint(&mid);
+
     return (1);
 }

@@ -2,10 +2,9 @@
 #include <stdio.h>
 
 /**
-* print_python_float - print python float
-* @p: python object
-* Return: Nothing
-*/
+ * print_python_float - Print information about Python float objects
+ * @p: Python object
+ */
 void print_python_float(PyObject *p)
 {
 	if (!PyFloat_Check(p))
@@ -14,11 +13,12 @@ void print_python_float(PyObject *p)
 		return;
 	}
 
-	double value = PyFloat_AS_DOUBLE(p);
+	double value = PyFloat_AsDouble(p);
 
 	printf("[.] float object info\n");
 	printf("  value: %f\n", value);
 }
+
 /**
  * print_hexn - print hex
  * @str: string
@@ -35,10 +35,10 @@ void print_hexn(const char *str, int n)
 	printf("%02x", str[i]);
 }
 /**
-* print_python_bytes - print python bytes
-* @p: python object
-* Return: Nothing
-*/
+ * print_python_bytes - print python bytes
+ * @p: python object
+ * Return: Nothing
+ */
 void print_python_bytes(PyObject *p)
 {
 	PyBytesObject *clone = (PyBytesObject *)p;
@@ -65,27 +65,37 @@ void print_python_bytes(PyObject *p)
 	}
 }
 /**
-* print_python_list - print python list
-* @p: python object
-* Return: Nothing
-*/
+ * print_python_list - Print information about Python list objects
+ * @p: Python object
+ */
 void print_python_list(PyObject *p)
 {
 	int i = 0, list_len = 0;
 	PyObject *item;
-	PyListObject *clone = (PyListObject *)p;
 
 	printf("[*] Python list info\n");
-	list_len = PyList_GET_SIZE(p);
+
+	if (!PyList_Check(p) && !PyTuple_Check(p) && !PySet_Check(p))
+	{
+		fprintf(stderr, "[ERROR] Invalid List Object\n");
+		return;
+	}
+
+	list_len = PySequence_Size(p);
 	printf("[*] Size of the Python List = %d\n", list_len);
-	printf("[*] Allocated = %d\n", (int)clone->allocated);
+	printf("[*] Allocated = %d\n", (int)((PyListObject *)p)->allocated);
 
 	for (; i < list_len; ++i)
 	{
-		item = PyList_GET_ITEM(p, i);
-		printf("Element %d: %s\n", i, item->ob_type->tp_name);
+		item = PySequence_GetItem(p, i);
+		printf("Element %d: %s\n", i, Py_TYPE(item)->tp_name);
 
 		if (PyBytes_Check(item))
 			print_python_bytes(item);
+
+		if (PyFloat_Check(item))
+			print_python_float(item);
+
+		Py_DECREF(item);
 	}
 }

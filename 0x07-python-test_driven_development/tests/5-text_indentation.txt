@@ -1,0 +1,13 @@
+>>> text_indentation = __import__("5-text_indentation").text_indentation
+>>> text_indentation("This is a test.It has multiple sentences.Does it work?")
+This is a test.
+<BLANKLINE>
+It has multiple sentences.
+<BLANKLINE>
+Does it work?
+<BLANKLINE>
+>>> text_indentation("No punctuation")
+No punctuation
+>>> text_indentation(123)
+Traceback (most recent call last):
+TypeError: text must be a string

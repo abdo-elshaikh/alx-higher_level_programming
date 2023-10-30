@@ -67,7 +67,5 @@ class Rectangle():
     def __repr__(self):
         return "Rectangle({}, {})".format(self.__width, self.__height)
 
-    # Print the message Bye rectangle... (... being 3 dots not ellipsis) when an instance of Rectangle is deleted
     def __del__(self):
         print("Bye rectangle...")
-        

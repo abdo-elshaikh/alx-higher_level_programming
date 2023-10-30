@@ -1,31 +1,34 @@
 #!/usr/bin/python3
-""" Class Rectangle """
+"""A class that defines a rectangle"""
 
 
-class Rectangle():
-    """
-    Class Rectangle
-    """
+class Rectangle:
+    """this represents a rectangle"""
     number_of_instances = 0
-    print_symbol = '#'
+    print_symbol = "#"
 
     def __init__(self, width=0, height=0):
         """Initializing this rectangle class
-        args:
-            width: width of the rectangle
-            height: height of the rectangle
+        Args:
+            width: represents the width of the rectangle
+            height: represents the height of the rectangle
+        Raises:
+            TypeError: if size is not integer
+            ValueError: if size is less than zero
         """
-        self.__width = width
-        self.__height = height
+        self.width = width
+        self.height = height
         Rectangle.number_of_instances += 1
 
     @property
     def width(self):
+        """retrieves width attribute"""
         return self.__width
 
     @width.setter
     def width(self, value):
-        if type(value) is not int:
+        """sets width attribute"""
+        if not isinstance(value, int):
             raise TypeError("width must be an integer")
         if value < 0:
             raise ValueError("width must be >= 0")
@@ -33,49 +36,52 @@ class Rectangle():
 
     @property
     def height(self):
+        """retrieves height attribute"""
         return self.__height
 
     @height.setter
     def height(self, value):
-        if type(value) is not int:
+        """sets height attribute"""
+        if not isinstance(value, int):
             raise TypeError("height must be an integer")
         if value < 0:
             raise ValueError("height must be >= 0")
         self.__height = value
 
     def area(self):
-        """Calculating the area of the rectangle
-        returns:
-            area: area of the rectangle
-        """
-        return self.__width * self.__height
+        """Returns the area of the rectangle"""
+        return (self.__width * self.__height)
 
     def perimeter(self):
-        """Calculating the perimeter of the rectangle
-        returns:
-            perimeter: perimeter of the rectangle
-        """
+        """Returns the perimeter of the rectangle"""
         if self.__width == 0 or self.__height == 0:
-            return 0
-        return (self.__width + self.__height) * 2
+            return (0)
+        return ((self.__width * 2) + (self.__height * 2))
 
-    def __str__(self):
-        """Print the rectangle with the character #"""
+    def __str__(self) -> str:
+        """presents a diagram of the rectangle defined for an object"""
         if self.__width == 0 or self.__height == 0:
-            return ""
-        rect = []
-        for i in range(self.__height):
-            rect.append(str(self.print_symbol) * self.__width)
-        return "\n".join(rect)
+            return ("")
+        rectangle = ""
+        for column in range(self.__height):
+            for row in range(self.__width):
+                try:
+                    rectangle += str(self.print_symbol)
+                except Exception:
+                    rectangle += type(self).print_symbol
+            if column < self.__height - 1:
+                rectangle += "\n"
+        return (rectangle)
 
     def __repr__(self):
-        return "Rectangle({}, {})".format(self.__width, self.__height)
+        """returns a string representation of the rectangle"""
+        return "Rectangle({:d}, {:d})".format(self.__width, self.__height)
 
     def __del__(self):
+        """prints a message for every object that is deleted"""
         print("Bye rectangle...")
         Rectangle.number_of_instances -= 1
 
-    # static method for bigger or equal
     @staticmethod
     def bigger_or_equal(rect_1, rect_2):
         if not isinstance(rect_1, Rectangle):
@@ -84,8 +90,9 @@ class Rectangle():
             raise TypeError("rect_2 must be an instance of Rectangle")
         if rect_1.area() >= rect_2.area():
             return rect_1
-        return rect_2
+        else:
+            return rect_2
 
     @classmethod
     def square(cls, size=0):
-        return cls(size, size)
+        return Rectangle(size, size)

@@ -12,10 +12,6 @@ class Rectangle():
         args:
             width: width of the rectangle
             height: height of the rectangle
-
-        Raises:
-            TypeError: width must be an integer
-            ValueError: width must be >= 0
         """
         self.__width = width
         self.__height = height

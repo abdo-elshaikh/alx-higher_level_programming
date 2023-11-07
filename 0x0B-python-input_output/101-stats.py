@@ -29,5 +29,7 @@ if __name__ == "__main__":
         if number_of_lines == 10:
             print("File size: {}".format(file_size))
             for status_code, count in status_codes.items():
+                if count == 0:
+                    continue
                 print("{}: {}".format(status_code, count))
             number_of_lines = 0

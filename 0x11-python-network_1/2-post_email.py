@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """ Python script that takes in a URL and Email, sends a POST request"""
 import sys
 import urllib.request
